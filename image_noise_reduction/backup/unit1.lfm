@@ -1,0 +1,56 @@
+object Form1: TForm1
+  Left = 745
+  Height = 484
+  Top = 568
+  Width = 1202
+  Caption = 'Form1'
+  ClientHeight = 484
+  ClientWidth = 1202
+  OnCreate = FormCreate
+  LCLVersion = '2.0.10.0'
+  object ButtonLoad: TButton
+    Left = 24
+    Height = 25
+    Top = 16
+    Width = 75
+    Caption = 'Load'
+    OnClick = ButtonLoadClick
+    TabOrder = 0
+  end
+  object Image1: TImage
+    Left = 24
+    Height = 96
+    Top = 72
+    Width = 96
+    AutoSize = True
+  end
+  object Image2: TImage
+    Left = 232
+    Height = 96
+    Top = 72
+    Width = 96
+  end
+  object ButtonSave: TButton
+    Left = 222
+    Height = 25
+    Top = 16
+    Width = 75
+    Caption = 'Save'
+    OnClick = ButtonSaveClick
+    TabOrder = 1
+  end
+  object Image3: TImage
+    Left = 24
+    Height = 96
+    Top = 216
+    Width = 96
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 128
+    Top = 16
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 170
+    Top = 16
+  end
+end
