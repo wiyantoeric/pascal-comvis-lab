@@ -1,10 +1,10 @@
 object Form1: TForm1
   Left = 580
-  Height = 436
+  Height = 507
   Top = 108
   Width = 438
   Caption = 'Form1'
-  ClientHeight = 436
+  ClientHeight = 507
   ClientWidth = 438
   DesignTimePPI = 120
   LCLVersion = '2.0.12.0'
@@ -21,14 +21,14 @@ object Form1: TForm1
   object Image1: TImage
     Left = 30
     Height = 120
-    Top = 90
+    Top = 120
     Width = 122
     AutoSize = True
   end
   object Image2: TImage
     Left = 290
     Height = 120
-    Top = 90
+    Top = 122
     Width = 120
   end
   object ButtonSave: TButton
@@ -44,14 +44,46 @@ object Form1: TForm1
   object Image3: TImage
     Left = 30
     Height = 120
-    Top = 270
+    Top = 320
     Width = 120
   end
   object Image4: TImage
     Left = 290
     Height = 120
-    Top = 270
+    Top = 320
     Width = 120
+  end
+  object Label1: TLabel
+    Left = 30
+    Height = 20
+    Top = 88
+    Width = 34
+    Caption = 'Input'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 290
+    Height = 20
+    Top = 88
+    Width = 92
+    Caption = 'Blur berwarna'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 30
+    Height = 20
+    Top = 288
+    Width = 92
+    Caption = 'Blur grayscale'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 290
+    Height = 20
+    Top = 288
+    Width = 34
+    Caption = 'Biner'
+    ParentColor = False
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 336
