@@ -213,7 +213,7 @@ procedure TForm1.ButtonSaveClick(Sender: TObject);
 begin
   if (SavePictureDialog1.Execute) then
   begin
-    image3.Picture.SaveToFile(SavePictureDialog1.FileName);
+    image4.Picture.SaveToFile(SavePictureDialog1.FileName);
   end;
 end;
 
