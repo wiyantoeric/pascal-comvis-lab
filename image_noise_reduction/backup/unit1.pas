@@ -19,6 +19,10 @@ type
     Image2: TImage;
     Image3: TImage;
     Image4: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
     SavePictureDialog1: TSavePictureDialog;
     procedure ButtonLoadClick(Sender: TObject);
@@ -46,7 +50,7 @@ var
 procedure TForm1.ButtonLoadClick(Sender: TObject);
                              
 var
-  j, i, ki, kj, r, g, b, gray, kRed, kGreen, kBlue, kGray : integer;
+  j, i, ki, kj, r, g, b, gray, kRed, kGreen, kBlue : integer;
   //sharpeningFilter : array[0..2,0..2] of integer = ((0,-1,0),(-1,5,-1),(0,-1,0));
   smoothingFilter : array[0..2,0..2] of single = ((1/9,1/9,1/9),(1/9,1/9,1/9),(1/9,1/9,1/9));
 begin
@@ -162,8 +166,7 @@ begin
   for j:=0 to image1.Height-1 do
   begin
     for i:=0 to image1.Width-1 do
-    begin              
-      kGray := 0;
+    begin
       kRed := 0;
       kGreen := 0;
       kBlue := 0;
@@ -173,14 +176,12 @@ begin
       begin
         for kj:=0 to 2 do
         begin
-          kGray := round(kGray + bitmapGray[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kRed := round(kRed + bitmapR[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kGreen := round(kGreen + bitmapG[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kBlue := round(kBlue + bitmapB[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
         end;
       end;
 
-      bitmapGrayFilter[i,j] := kGray;    
       bitmapRedFilter[i,j] := kRed;
       bitmapGreenFilter[i,j] := kGreen;
       bitmapBlueFilter[i,j] := kBlue;
@@ -188,12 +189,13 @@ begin
     end;
   end;
 
-  // output grayscale
+  // grayscale
   for j:=0 to image1.Height-1 do
   begin
     for i:=0 to image1.Width-1 do
     begin
-      image3.canvas.pixels[i,j] := RGB(bitmapGrayFilter[i,j],bitmapGrayFilter[i,j],bitmapGrayFilter[i,j]) ;
+      bitmapGrayFilter[i,j] := (bitmapRedFilter[i,j] + bitmapGreenFilter[i,j] + bitmapBlueFilter[i,j]) div 3;
+      image3.canvas.pixels[i,j] := RGB(bitmapGrayFilter[i,j],bitmapGrayFilter[i,j],bitmapGrayFilter[i,j]);
     end;
   end;
 

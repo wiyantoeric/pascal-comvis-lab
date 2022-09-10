@@ -50,8 +50,7 @@ var
 procedure TForm1.ButtonLoadClick(Sender: TObject);
                              
 var
-  j, i, ki, kj, r, g, b, gray, kRed, kGreen, kBlue, kGray : integer;
-  //sharpeningFilter : array[0..2,0..2] of integer = ((0,-1,0),(-1,5,-1),(0,-1,0));
+  j, i, ki, kj, r, g, b, gray, kRed, kGreen, kBlue : integer;
   smoothingFilter : array[0..2,0..2] of single = ((1/9,1/9,1/9),(1/9,1/9,1/9),(1/9,1/9,1/9));
 begin
   if (OpenPictureDialog1.Execute) then
@@ -119,55 +118,12 @@ begin
       image1.canvas.pixels[i,j] := RGB(bitmapR[i,j],bitmapG[i,j],bitmapB[i,j]);
     end;
   end;
-//
-//  // sharpen
-//  for j:=0 to image1.Height-1 do
-//  begin
-//    for i:=0 to image1.Width-1 do
-//    begin
-//      kGray := 0;
-//      kRed := 0;
-//      kGreen := 0;
-//      kBlue := 0;
-//
-//      // filtering
-//      for ki:=0 to 2 do
-//      begin
-//        for kj:=0 to 2 do
-//        begin
-//          kGray := round(kGray + bitmapGray[i+ki-1,j+kj-1] * sharpeningFilter[ki,kj]);
-//          kRed := round(kRed + bitmapR[i+ki-1,j+kj-1] * sharpeningFilter[ki,kj]);
-//          kGreen := round(kGreen + bitmapG[i+ki-1,j+kj-1] * sharpeningFilter[ki,kj]);
-//          kBlue := round(kBlue + bitmapB[i+ki-1,j+kj-1] * sharpeningFilter[ki,kj]);
-//        end;
-//      end;
-//
-//      if kGray > 255 then kGray := 255;
-//      if kGray < 0 then kGray := 0;
-//
-//      if kRed > 255 then kRed := 255;
-//      if kRed < 0 then kRed := 0;
-//
-//      if kGreen > 255 then kGreen := 255;
-//      if kGreen < 0 then kGreen := 0;
-//
-//      if kBlue > 255 then kBlue := 255;
-//      if kBlue < 0 then kBlue := 0;
-//
-//      bitmapGrayFilter[i,j] := kGray;
-//      bitmapRedFilter[i,j] := kRed;
-//      bitmapGreenFilter[i,j] := kGreen;
-//      bitmapBlueFilter[i,j] := kBlue;
-//      image4.canvas.pixels[i,j] := RGB(kRed, kGreen, kBlue);
-//    end;
-//  end;
-//
+
   // blur
   for j:=0 to image1.Height-1 do
   begin
     for i:=0 to image1.Width-1 do
-    begin              
-      kGray := 0;
+    begin
       kRed := 0;
       kGreen := 0;
       kBlue := 0;
@@ -177,14 +133,12 @@ begin
       begin
         for kj:=0 to 2 do
         begin
-          kGray := round(kGray + bitmapGray[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kRed := round(kRed + bitmapR[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kGreen := round(kGreen + bitmapG[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
           kBlue := round(kBlue + bitmapB[i+ki-1,j+kj-1] * smoothingFilter[ki,kj]);
         end;
       end;
 
-      bitmapGrayFilter[i,j] := kGray;    
       bitmapRedFilter[i,j] := kRed;
       bitmapGreenFilter[i,j] := kGreen;
       bitmapBlueFilter[i,j] := kBlue;
@@ -192,16 +146,17 @@ begin
     end;
   end;
 
-  // output grayscale
+  // grayscale
   for j:=0 to image1.Height-1 do
   begin
     for i:=0 to image1.Width-1 do
     begin
-      image3.canvas.pixels[i,j] := RGB(bitmapGrayFilter[i,j],bitmapGrayFilter[i,j],bitmapGrayFilter[i,j]) ;
+      bitmapGrayFilter[i,j] := (bitmapRedFilter[i,j] + bitmapGreenFilter[i,j] + bitmapBlueFilter[i,j]) div 3;
+      image3.canvas.pixels[i,j] := RGB(bitmapGrayFilter[i,j],bitmapGrayFilter[i,j],bitmapGrayFilter[i,j]);
     end;
   end;
 
-  // output
+  // output biner
   for j:=0 to image1.Height-1 do
   begin
     for i:=0 to image1.Width-1 do
