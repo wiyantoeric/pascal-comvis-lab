@@ -217,10 +217,5 @@ begin
   end;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-
-end;
-
 end.
 

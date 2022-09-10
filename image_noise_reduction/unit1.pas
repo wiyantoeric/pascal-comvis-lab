@@ -23,7 +23,6 @@ type
     SavePictureDialog1: TSavePictureDialog;
     procedure ButtonLoadClick(Sender: TObject);
     procedure ButtonSaveClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
 
   public
