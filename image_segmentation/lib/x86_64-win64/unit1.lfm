@@ -1,0 +1,169 @@
+object Form1: TForm1
+  Left = 981
+  Height = 784
+  Top = 111
+  Width = 961
+  Caption = 'Form1'
+  ClientHeight = 784
+  ClientWidth = 961
+  DesignTimePPI = 120
+  LCLVersion = '2.0.12.0'
+  object ButtonLoad: TButton
+    Left = 30
+    Height = 31
+    Top = 20
+    Width = 94
+    Caption = 'Load'
+    OnClick = ButtonLoadClick
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Image1: TImage
+    Left = 30
+    Height = 120
+    Top = 200
+    Width = 122
+    AutoSize = True
+  end
+  object Image2: TImage
+    Left = 290
+    Height = 120
+    Top = 200
+    Width = 120
+  end
+  object ButtonSave: TButton
+    Left = 160
+    Height = 31
+    Top = 20
+    Width = 94
+    Caption = 'Save'
+    OnClick = ButtonSaveClick
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Image3: TImage
+    Left = 30
+    Height = 120
+    Top = 510
+    Width = 120
+  end
+  object Image4: TImage
+    Left = 290
+    Height = 120
+    Top = 510
+    Width = 120
+  end
+  object Label1: TLabel
+    Left = 30
+    Height = 20
+    Top = 170
+    Width = 34
+    Caption = 'Input'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 290
+    Height = 20
+    Top = 170
+    Width = 92
+    Caption = 'Blur berwarna'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 30
+    Height = 20
+    Top = 480
+    Width = 92
+    Caption = 'Blur grayscale'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 290
+    Height = 20
+    Top = 480
+    Width = 34
+    Caption = 'Biner'
+    ParentColor = False
+    ParentFont = False
+  end
+  object btnSegmen: TButton
+    Left = 30
+    Height = 31
+    Top = 90
+    Width = 94
+    Caption = 'Segmentasi'
+    OnClick = btnSegmenClick
+    ParentFont = False
+    TabOrder = 2
+  end
+  object Image5: TImage
+    Left = 530
+    Height = 90
+    Top = 200
+    Width = 90
+    AutoSize = True
+  end
+  object Segmentasi: TStaticText
+    Left = 530
+    Height = 21
+    Top = 170
+    Width = 81
+    Caption = 'Segmentasi'
+    ParentFont = False
+    TabOrder = 3
+  end
+  object TrackBar1: TTrackBar
+    Left = 30
+    Height = 31
+    Top = 660
+    Width = 380
+    Max = 255
+    OnChange = TrackBar1Change
+    Position = 0
+    ParentFont = False
+    TabOrder = 4
+  end
+  object Label5: TLabel
+    Left = 600
+    Height = 20
+    Top = 398
+    Width = 44
+    Caption = 'Label5'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 608
+    Height = 20
+    Top = 520
+    Width = 44
+    Caption = 'Label6'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 512
+    Height = 20
+    Top = 464
+    Width = 44
+    Caption = 'Label7'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 672
+    Height = 20
+    Top = 456
+    Width = 44
+    Caption = 'Label8'
+    ParentColor = False
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 336
+    Top = 16
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 460
+    Top = 16
+  end
+end
