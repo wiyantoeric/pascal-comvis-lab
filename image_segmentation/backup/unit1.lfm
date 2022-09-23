@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 981
+  Left = 646
   Height = 784
-  Top = 111
-  Width = 961
+  Top = 156
+  Width = 1171
   Caption = 'Form1'
   ClientHeight = 784
-  ClientWidth = 961
+  ClientWidth = 1171
   DesignTimePPI = 120
   LCLVersion = '2.0.12.0'
   object ButtonLoad: TButton
@@ -116,15 +116,120 @@ object Form1: TForm1
     TabOrder = 3
   end
   object TrackBar1: TTrackBar
-    Left = 30
+    Left = 32
     Height = 31
     Top = 680
     Width = 380
     Max = 255
     OnChange = TrackBar1Change
-    Position = 0
+    Position = 127
     ParentFont = False
     TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 200
+    Height = 31
+    Top = 85
+    Width = 94
+    Caption = 'Button1'
+    OnClick = Button1Click
+    TabOrder = 5
+  end
+  object Image6: TImage
+    Left = 528
+    Height = 100
+    Top = 328
+    Width = 100
+  end
+  object Label5: TLabel
+    Left = 728
+    Height = 20
+    Top = 184
+    Width = 44
+    Caption = 'Label5'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 672
+    Height = 20
+    Top = 320
+    Width = 44
+    Caption = 'Label6'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 706
+    Height = 20
+    Top = 354
+    Width = 44
+    Caption = 'Label7'
+    ParentColor = False
+  end
+  object Image7: TImage
+    Left = 528
+    Height = 100
+    Top = 510
+    Width = 100
+  end
+  object ButtonTepi: TButton
+    Left = 336
+    Height = 31
+    Top = 88
+    Width = 94
+    Caption = 'Tepi'
+    OnClick = ButtonTepiClick
+    TabOrder = 6
+  end
+  object Image8: TImage
+    Left = 672
+    Height = 113
+    Top = 432
+    Width = 113
+  end
+  object Label8: TLabel
+    Left = 441
+    Height = 20
+    Top = 689
+    Width = 44
+    Caption = 'Label8'
+    ParentColor = False
+  end
+  object Image9: TImage
+    Left = 312
+    Height = 113
+    Top = 352
+    Width = 113
+    OnClick = Image9Click
+  end
+  object ButtonDilasi: TButton
+    Left = 464
+    Height = 31
+    Top = 85
+    Width = 94
+    Caption = 'Dilasi'
+    OnClick = ButtonDilasiClick
+    TabOrder = 7
+  end
+  object Image10: TImage
+    Left = 816
+    Height = 113
+    Top = 224
+    Width = 113
+  end
+  object ButtonErosi: TButton
+    Left = 580
+    Height = 31
+    Top = 88
+    Width = 94
+    Caption = 'ButtonErosi'
+    OnClick = ButtonErosiClick
+    TabOrder = 8
+  end
+  object Image11: TImage
+    Left = 912
+    Height = 113
+    Top = 368
+    Width = 113
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 336
