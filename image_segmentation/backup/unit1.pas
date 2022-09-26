@@ -13,18 +13,12 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    ButtonErosi: TButton;
-    ButtonDilasi: TButton;
+    ButtonSegmentasi: TButton;
     ButtonTepi: TButton;
-    ButtonSegmen: TButton;
     ButtonLoad: TButton;
     ButtonSave: TButton;
+    GroupBoxSegmentasi: TGroupBox;
     Image1: TImage;
-    Image10: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
     Image5: TImage;
     Image6: TImage;
     Image7: TImage;
@@ -32,29 +26,26 @@ type
     Image9: TImage;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
     SavePictureDialog1: TSavePictureDialog;
     Segmentasi: TStaticText;
-    TrackBar1: TTrackBar;
-    procedure Button1Click(Sender: TObject);
-    procedure ButtonErosiClick(Sender: TObject);
-    procedure ButtonDilasiClick(Sender: TObject);
+    Segmentasi1: TStaticText;
+    Segmentasi2: TStaticText;
+    TextBiner: TStaticText;
+    TextGrayscale: TStaticText;
+    TextInput: TLabel;
+    TextTepi: TLabel;
+    TextWarna: TStaticText;
+    procedure ButtonSegmentasiClick(Sender: TObject);
     procedure ButtonTepiClick(Sender: TObject);
-    procedure ButtonSegmenClick(Sender: TObject);
     procedure ButtonLoadClick(Sender: TObject);
-    procedure ButtonSaveClick(Sender: TObject);
-    procedure Image9Click(Sender: TObject);
-    procedure TrackBar1Change(Sender: TObject);
 
     procedure Dilasi();
     procedure Erosi();
     procedure printBiner();
+    procedure isiTepiBiner();   
+    procedure isiTepiBinerMorph();
+    procedure SegmentasiCitra();
   private
 
   public
@@ -85,22 +76,19 @@ begin
   if (OpenPictureDialog1.Execute) then
   begin
     Image1.Picture.LoadFromFile(OpenPictureDialog1.FileName);
-  end;                              
-
-  image2.Width :=image1.width;
-  image2.height:=image1.height;
-
-  image3.Width :=image1.width;
-  image3.height:=image1.height;
-
-  image4.Width :=image1.width;
-  image4.height:=image1.height;
-
-  image5.Width :=image1.width;
-  image5.height:=image1.height;
+  end;
 
   image9.width := image1.width;
   image9.height := image1.height;
+
+  image6.width := image1.width;
+  image6.height := image1.height;
+
+  image7.width := image1.width;
+  image7.height := image1.height;
+
+  image8.width := image1.width;
+  image8.height := image1.height;
 
   for i:=0 to image1.Width-1 do
   begin
@@ -177,7 +165,6 @@ begin
       bitmapRedFilter[i,j] := kRed;
       bitmapGreenFilter[i,j] := kGreen;
       bitmapBlueFilter[i,j] := kBlue;
-      image2.canvas.pixels[i,j] := RGB(kRed, kGreen, kBlue);
     end;
   end;
 
@@ -187,7 +174,6 @@ begin
     for j:=0 to image1.Height-1 do
     begin
       bitmapGrayFilter[i,j] := (bitmapRedFilter[i,j] + bitmapGreenFilter[i,j] + bitmapBlueFilter[i,j]) div 3;
-      image3.canvas.pixels[i,j] := RGB(bitmapGrayFilter[i,j],bitmapGrayFilter[i,j],bitmapGrayFilter[i,j]);
     end;
   end;
 
@@ -204,33 +190,182 @@ begin
       begin
         bitmapBiner[i,j] := 0;
       end;
-      image4.canvas.pixels[i,j] := RGB(bitmapBiner[i,j]*255, bitmapBiner[i,j]*255, bitmapBiner[i,j]*255);
     end;
   end;
-                                                                                        
-      image4.canvas.pixels[10,0] := RGB(0,0,0);
-  //for j:=0 to image1.Height-1 do
-  //begin
-  //  for i:=0 to image1.Width-1 do
-  //  begin
-  //    image5.canvas.pixels[i,j] := RGB(255,255,255);
-  //  end;
-  //end;
-  //Tform1.btnSegmenClick(nil);
 
-//  72 threshold
-  image8.width := image1.width;
-  image8.height := image1.height;
-  for i:=0 to image1.Width-1 do
+  isiTepiBiner();
+end;
+
+procedure TForm1.ButtonSegmentasiClick(Sender: TObject);
+var
+  loopErosi, loopDilasi : integer;
+begin
+  for loopDilasi := 1 to 3 do
   begin
-    for j:=0 to image1.Height-1 do
+    Dilasi();
+  end;
+
+  for loopErosi := 1 to 3 do
+  begin
+    Erosi();
+  end;
+
+  for loopErosi := 1 to 2 do
+  begin
+    Erosi();
+  end;
+
+  for loopDilasi := 1 to 2 do
+  begin
+    Dilasi();
+  end;
+
+  SegmentasiCitra();
+
+end;
+
+procedure TForm1.ButtonTepiClick(Sender: TObject);
+var
+  i, j, ki, kj : integer;
+  bitmapTepi, bitmapKontur : array[0..1000, 0..1000] of integer;
+  kernelTepi : array[-1..1, -1..1] of integer = ((1,1,1),(1,-8,1),(1,1,1));
+begin
+  image5.height := image1.height;
+  image5.width := image1.width;
+
+  for i:=0 to image5.width do
+  begin
+    for j:=0 to image5.height do
     begin
-      if bitmapGrayFilter[i,j] > 72 then image8.canvas.pixels[i,j] := RGB(255,255,255) else image8.canvas.pixels[i,j] := RGB(0,0,0);
+      bitmapTepi[i,j] := 0;
+      bitmapKontur[i,j] := 0;
+
+      for ki:=-1 to 1 do
+      begin
+        for kj:=-1 to 1 do
+        begin
+          bitmapTepi[i,j] := round(bitmapTepi[i,j] + bitmapBinerMorph[i+ki,j+kj] * kernelTepi[ki,kj]);
+          bitmapKontur[i,j] := round(bitmapKontur[i,j] + bitmapGray[i+ki,j+kj] * kernelTepi[ki,kj]);
+        end;
+      end;
+
+      if bitmapTepi[i,j] < 0 then bitmapTepi[i,j] := 0;
+      if bitmapKontur[i,j] > 1 then bitmapKontur[i,j] := 1;
+
+      if bitmapKontur[i,j] < 0 then bitmapKontur[i,j] := 0;
+      if bitmapKontur[i,j] > 1 then bitmapKontur[i,j] := 1;
+
+      image5.canvas.pixels[i,j] := RGB(bitmapTepi[i,j]*255,bitmapTepi[i,j]*255,bitmapTepi[i,j]*255); 
+      image8.canvas.pixels[i,j] := RGB(bitmapKontur[i,j],bitmapKontur[i,j],bitmapKontur[i,j]);
+    end;
+  end;
+
+  for i:=0 to image5.width do
+  begin
+    for j:=0 to image5.height do
+    begin
+
     end;
   end;
 end;
 
-procedure TForm1.ButtonSegmenClick(Sender: TObject);
+procedure TForm1.Dilasi();
+var
+  i, j, kj, ki : integer;
+  SE : array[-1..1,-1..1] of integer = ((0,0,0),(0,0,0),(0,0,0));
+  temp : boolean;
+begin
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      temp := false;
+
+      for kj:= -1 to 1 do
+      begin
+        for ki:= -1 to 1 do
+        begin
+          if isMorphed then
+            temp := temp OR (bitmapBinerMorph[i+ki,j+kj] = SE[ki,kj])
+          else
+            temp := temp OR (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
+        end;
+      end;
+
+      if temp then
+        image9.canvas.pixels[i,j] := RGB(0,0,0)
+      else
+        image9.canvas.pixels[i,j] := RGB(255,255,255);
+    end;
+  end;
+
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      if (getRValue(image9.canvas.pixels[i,j])+ getGValue(image9.canvas.pixels[i,j]) + getBValue(image9.canvas.pixels[i,j])) div 3 > 127 then
+        bitmapBinerMorph[i,j] := 1
+      else
+        bitmapBinerMorph[i,j] := 0;
+    end;
+  end;
+
+  if not isMorphed then isiTepiBinerMorph();
+
+  printBiner();
+
+  isMorphed := true;
+end;
+
+procedure TForm1.Erosi();
+var
+  i, j, kj, ki : integer;
+  SE : array[-1..1,-1..1] of integer = ((0,0,0),(0,0,0),(0,0,0));
+  temp : boolean;
+begin
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      temp := true;
+
+      for kj:= -1 to 1 do
+      begin
+        for ki:= -1 to 1 do
+        begin
+          if isMorphed then
+            temp := temp AND (bitmapBinerMorph[i+ki,j+kj] = SE[ki,kj])
+          else
+            temp := temp AND (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
+        end;
+      end;
+
+      if temp then
+        image9.canvas.pixels[i,j] := RGB(0,0,0)
+      else
+        image9.canvas.pixels[i,j] := RGB(255,255,255);
+    end;
+  end;
+
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      if (getRValue(image9.canvas.pixels[i,j])+ getGValue(image9.canvas.pixels[i,j]) + getBValue(image9.canvas.pixels[i,j])) div 3 > 127 then
+        bitmapBinerMorph[i,j] := 1
+      else
+        bitmapBinerMorph[i,j] := 0;
+    end;
+  end;
+
+  if not isMorphed then isiTepiBinerMorph();
+
+  printBiner();
+
+  isMorphed := true;
+end;
+
+procedure TForm1.SegmentasiCitra();
 var
   i, j : integer;
 label
@@ -238,10 +373,10 @@ label
 begin
 //  tepi kiri
     for i:=0 to image1.Width-1 do
-    begin                          
+    begin
       for j:=0 to image1.Height-1 do
       begin
-        if (bitmapBiner[i,j] = 0) then
+        if (bitmapBinerMorph[i,j] = 0) then
         begin
           tepikiri := i;
           goto labelatas;
@@ -255,7 +390,7 @@ begin
     begin
       for j:=0 to image1.height-1 do
       begin
-        if (bitmapBiner[j,i] = 0) then
+        if (bitmapBinerMorph[j,i] = 0) then
         begin
           tepiatas := i;
           goto labelkanan;
@@ -270,7 +405,7 @@ begin
     begin
       for j:=0 to image1.Height-1 do
       begin
-        if (bitmapBiner[i,j] = 0) then
+        if (bitmapBinerMorph[i,j] = 0) then
         begin
           tepikanan := i;
           goto labelbawah;
@@ -278,7 +413,7 @@ begin
       end;
       i := i-1;
     end;
-                  
+
     //  tepi bawah
     labelbawah:
     i:=image1.width-1;
@@ -287,7 +422,7 @@ begin
       j:=image1.height-1;
       while j >= 0 do
       begin
-        if (bitmapBiner[j,i] = 0) then
+        if (bitmapBinerMorph[i,j] = 0) then
         begin
           tepibawah := i;
           goto labelprint;
@@ -298,240 +433,74 @@ begin
     end;
 
   labelprint:
+
+  Image9.Canvas.Brush.Color := ClWhite;
+  Image9.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+  Image9.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+
+  Image6.Canvas.Brush.Color := ClWhite;
+  Image6.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+  Image6.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+
+  Image7.Canvas.Brush.Color := ClWhite;
+  Image7.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+  Image7.Canvas.FillRect(0, 0, Image9.Canvas.Width, Image9.Canvas.Height);
+
   for i:=tepikiri to tepikanan do
   begin
     for j:=tepiatas to tepibawah do
     begin
-      image5.canvas.pixels[i,j] := RGB(bitmapBiner[i,j]*255, bitmapBiner[i,j]*255, bitmapBiner[i,j]*255);
-    end;
-  end;
-end;
-
-procedure TForm1.Button1Click(Sender: TObject);
-var
-  i, j, mostColor, darkest, mostDark, darkIndex : integer;
-  grayHistogram : array[0..1000] of integer;
-
-begin
-  mostColor := 0;
-  darkest := 255;
-  mostDark := 255;
-
-  for i:=0 to 255 do
-  begin
-    grayHistogram[i] := 0;
-  end;
-
-  for i:=0 to image1.width-1 do
-  begin
-    for j:=0 to image1.height-1 do
-    begin
-      grayHistogram[bitmapGray[i,j]] := grayHistogram[bitmapGray[i,j]] + 1;
-      if bitmapGray[i,j] < darkest then darkest := bitmapGray[i,j];
-    end;
-  end;
-                                  
-  for i:=0 to 255 do
-  begin
-    if grayHistogram[i] > mostColor then mostColor := grayHistogram[i];
-  end;
-
-  for i:=0 to 127 do
-  begin
-    if grayHistogram[i] > mostDark then
-    begin
-      mostDark := grayHistogram[i];
-      darkIndex := i;
-    end;
-  end;
-
-  label5.caption := inttostr(mostColor);
-  label6.caption := inttostr(darkIndex);
-  label7.caption := inttostr(mostDark);
-
-  for i:=0 to image1.width-1 do
-  begin
-    for j:=0 to image1.height-1 do
-    begin
-      if (bitmapGray[i,j] < darkest + 80) then
+      if bitmapBinerMorph[i,j] = 0 then
       begin
-        image6.canvas.pixels[i,j] := RGB(bitmapGray[i,j],bitmapGray[i,j],bitmapGray[i,j]);
-      end
-      else
-      begin
-        image6.canvas.pixels[i,j] := RGB(255,255,255);
-      end;
-    end;
-  end;
-end;
-
-procedure TForm1.ButtonErosiClick(Sender: TObject);
-begin
-  Erosi();  
-  printBiner();
-end;
-
-procedure TForm1.ButtonDilasiClick(Sender: TObject);
-begin
-  Dilasi();
-end;
-
-procedure TForm1.ButtonTepiClick(Sender: TObject);
-var
-  i, j, ki, kj : integer;
-  bitmapTepi : array[0..1000, 0..1000] of integer;
-  kernelTepi : array[0..2, 0..2] of integer = ((1,1,1),(1,-8,1),(1,1,1));
-begin
-  image8.height := image1.height;
-  image8.width := image1.width;
-
-  for i:=0 to image8.width do
-  begin
-    for j:=0 to image8.height do
-    begin
-    bitmapTepi[i,j] := 0;
-
-    for ki:=0 to 2 do
-      begin
-        for kj:=0 to 2 do
-        begin
-          bitmapTepi[i,j] := round(bitmapTepi[i,j] + bitmapBiner[i+ki-1,j+kj-1] * kernelTepi[ki,kj]);
-        end;
-      end;
-    if bitmapTepi[i,j] < 0 then bitmapTepi[i,j] := 0;
-    if bitmapTepi[i,j] > 1 then bitmapTepi[i,j] := 1;
-
-    image8.canvas.pixels[i,j] := RGB(bitmapTepi[i,j]*255,bitmapTepi[i,j]*255,bitmapTepi[i,j]*255);
-    end;
-  end;
-end;
-
-procedure TForm1.ButtonSaveClick(Sender: TObject);
-begin
-  if (SavePictureDialog1.Execute) then
-  begin
-    image4.Picture.SaveToFile(SavePictureDialog1.FileName);
-  end;
-end;
-
-procedure TForm1.Image9Click(Sender: TObject);
-begin
-
-end;
-
-procedure TForm1.TrackBar1Change(Sender: TObject);
-var
-  i, j, threshold : integer;
-begin
-  threshold := trackbar1.position;
-  label8.caption := inttostr(threshold);
-  image7.width := image1.width;
-  image7.height := image1.height;
-  for i := 0 to image1.width-1 do
-  begin
-    for j:=0 to image1.height-1 do
-    begin
-      if bitmapGrayFilter[i,j] > threshold then image7.canvas.pixels[i,j] := RGB(255,255,255) else image7.canvas.pixels[i,j] := RGB(0,0,0);
-    end;
-  end;
-end;
-
-procedure TForm1.Dilasi();
-var
-  i, j, kj, ki : integer;
-  SE : array[-1..1,-1..1] of integer = ((0,0,0),(0,0,0),(0,0,0));
-  bitmapBin : array [0..1000,0..1000] of integer;
-  temp : boolean;
-begin
-  for i:=0 to image1.width-1 do
-  begin
-    for j:=0 to image1.height-1 do
-    begin
-      temp := false;
-      for kj:= -1 to 1 do
-      begin
-        for ki:= -1 to 1 do
-        begin
-          if isMorphed then
-            temp := temp OR (bitmapBinerMorph[i+ki,j+kj] = SE[ki,kj])
-          else
-            temp := temp OR (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
-        end;
-      end;
-
-      if temp then
-      begin
-        bitmapBinerMorph[i,j] := 0;
-        bitmapBin[i,j] := 0;
-      end
-      else
-      begin
-        bitmapBinerMorph[i,j] := 1;
-        bitmapBin[i,j] := 1;
+        image9.canvas.pixels[i,j] := RGB(bitmapR[i,j],bitmapG[i,j],bitmapB[i,j]);
+        image6.canvas.pixels[i,j] := RGB(bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255);
+        image7.canvas.pixels[i,j] := RGB(bitmapGray[i,j],bitmapGray[i,j],bitmapGray[i,j]);
       end;
     end;
   end;
 
-//  printing
-  //printBiner();
+  image9.Canvas.Pen.Color := clred;
 
-    //else
-  //begin                       
-  //  isMorphed := true;
-  //  for i:=0 to image9.width-1 do
-  //  begin
-  //    for j:=0 to image9.height-1 do
-  //    begin
-  //      bitmapBinerMorph[i,j] := bitmapBiner[i,j];
-  //      image9.canvas.pixels[i,j] := RGB(bitmapBiner[i,j]*255,bitmapBiner[i,j]*255,bitmapBiner[i,j]*255);
-  //    end;
-  //  end;
-  //end;
+  image9.Canvas.MoveTo(tepikiri, tepiatas);
+  image9.Canvas.LineTo(tepikanan, tepiatas);
 
+  image9.Canvas.MoveTo(tepikanan, tepiatas);
+  image9.Canvas.LineTo(tepikanan, tepibawah);
 
-  for i:=0 to image9.Width-1 do
-  begin
-    for j:=0 to image9.Height-1 do
-    begin
-      image9.canvas.pixels[i,j] := RGB(bitmapBin[i,j]*255,bitmapBin[i,j]*255,bitmapBin[i,j]*255);
-    end;
-  end;
-  isMorphed := true;
+  image9.Canvas.MoveTo(tepikanan, tepibawah);
+  image9.Canvas.LineTo(tepikiri, tepibawah);
+
+  image9.Canvas.MoveTo(tepikiri, tepibawah);
+  image9.Canvas.LineTo(tepikiri, tepiatas);
+
+  image6.Canvas.Pen.Color := clred;
+
+  image6.Canvas.MoveTo(tepikiri, tepiatas);
+  image6.Canvas.LineTo(tepikanan, tepiatas);
+
+  image6.Canvas.MoveTo(tepikanan, tepiatas);
+  image6.Canvas.LineTo(tepikanan, tepibawah);
+
+  image6.Canvas.MoveTo(tepikanan, tepibawah);
+  image6.Canvas.LineTo(tepikiri, tepibawah);
+
+  image6.Canvas.MoveTo(tepikiri, tepibawah);
+  image6.Canvas.LineTo(tepikiri, tepiatas);
+
+  image7.Canvas.Pen.Color := clred;
+
+  image7.Canvas.MoveTo(tepikiri, tepiatas);
+  image7.Canvas.LineTo(tepikanan, tepiatas);
+
+  image7.Canvas.MoveTo(tepikanan, tepiatas);
+  image7.Canvas.LineTo(tepikanan, tepibawah);
+
+  image7.Canvas.MoveTo(tepikanan, tepibawah);
+  image7.Canvas.LineTo(tepikiri, tepibawah);
+
+  image7.Canvas.MoveTo(tepikiri, tepibawah);
+  image7.Canvas.LineTo(tepikiri, tepiatas);
 end;
-
-procedure TForm1.Erosi();
-var
-  i, j, kj, ki : integer;
-  SE : array[-1..1,-1..1] of integer = ((0,0,0),(0,0,0),(0,0,0));
-  temp : boolean;
-begin
-  for i:=0 to image1.width-1 do
-  begin
-    for j:=0 to image1.height-1 do
-    begin
-      temp := false;
-      for kj:= -1 to 1 do
-      begin
-        for ki:= -1 to 1 do
-        begin
-          temp := temp AND (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
-        end;
-      end;
-
-      if temp then
-      begin                   
-        bitmapBiner[i,j] := 0;
-      end
-      else
-      begin
-        bitmapBiner[i,j] := 1;
-      end;
-                                                                                                         
-        image9.canvas.pixels[i,j] := RGB(bitmapBiner[i,j]*255,bitmapBiner[i,j]*255,bitmapBiner[i,j]*255);
-    end;
-  end;
-end;
-
 
 procedure TForm1.printBiner();
 var
@@ -544,6 +513,50 @@ begin
       image9.canvas.pixels[i,j] := RGB(bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255)
     end;
   end;
+end;
+
+procedure TForm1.isiTepiBiner();
+var
+  i, j : integer;
+begin
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      if i = 0 then bitmapBiner[i-1,j] := bitmapBiner[i,j];
+      if j = 0 then bitmapBiner[i,j-1] := bitmapBiner[i,j];
+      if i = image1.width-1 then bitmapBiner[i+1,j] := bitmapBiner[i,j];
+      if j = image1.height-1 then bitmapBiner[i,j+1] := bitmapBiner[i,j];
+    end;
+  end;
+
+//  mengisi sudut
+  bitmapBiner[-1,-1] := 1;
+  bitmapBiner[image1.width,-1] := 1;
+  bitmapBiner[-1,image1.height] := 1;
+  bitmapBiner[image1.width,image1.height] := 1;
+end;
+
+procedure TForm1.isiTepiBinerMorph();
+var
+  i, j : integer;
+begin
+  for i:=0 to image1.width-1 do
+  begin
+    for j:=0 to image1.height-1 do
+    begin
+      if i = 0 then bitmapBinerMorph[i-1,j] := 1;
+      if j = 0 then bitmapBinerMorph[i,j-1] := 1;
+      if i = image1.width-1 then bitmapBinerMorph[i+1,j] := 1;
+      if j = image1.height-1 then bitmapBinerMorph[i,j+1] := 1;
+    end;
+  end;
+
+//  mengisi sudut
+  bitmapBinerMorph[-1,-1] := 1;
+  bitmapBinerMorph[image1.width,-1] := 1;
+  bitmapBinerMorph[-1,image1.height] := 1;
+  bitmapBinerMorph[image1.width,image1.height] := 1;
 end;
 
 end.
