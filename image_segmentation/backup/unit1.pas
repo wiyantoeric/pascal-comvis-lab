@@ -142,7 +142,7 @@ begin
     end;
   end;
 
-  // blur  
+  // blurring  
   for i:=0 to image1.Width-1 do
   begin
     for j:=0 to image1.Height-1 do
@@ -151,7 +151,7 @@ begin
       kGreen := 0;
       kBlue := 0;
 
-      // filtering
+      // filtering citra dengan smoothing filter
       for ki:=0 to 2 do
       begin
         for kj:=0 to 2 do
@@ -168,7 +168,7 @@ begin
     end;
   end;
 
-  // grayscale
+  // grayscaling citra
   for i:=0 to image1.Width-1 do
   begin
     for j:=0 to image1.Height-1 do
@@ -177,7 +177,7 @@ begin
     end;
   end;
 
-  // output biner
+  // binerisasi dengan threshold bernilai 127
   for i:=0 to image1.Width-1 do
   begin
     for j:=0 to image1.Height-1 do
@@ -200,6 +200,7 @@ procedure TForm1.ButtonSegmentasiClick(Sender: TObject);
 var
   loopErosi, loopDilasi : integer;
 begin
+//  proses erosi dan dilasi untuk menghilangkan objek bukan iris dan noise
   for loopDilasi := 1 to 3 do
   begin
     Dilasi();
@@ -221,7 +222,6 @@ begin
   end;
 
   SegmentasiCitra();
-
 end;
 
 procedure TForm1.ButtonTepiClick(Sender: TObject);
@@ -233,6 +233,7 @@ begin
   image5.height := image1.height;
   image5.width := image1.width;
 
+//
   for i:=0 to image5.width do
   begin
     for j:=0 to image5.height do
@@ -240,6 +241,7 @@ begin
       bitmapTepi[i,j] := 0;
       bitmapKontur[i,j] := 0;
 
+//      filtering citra dengan filter hpf 0 core negatif untuk mengekstrak kontur dan tepi objek
       for ki:=-1 to 1 do
       begin
         for kj:=-1 to 1 do
@@ -250,21 +252,16 @@ begin
       end;
 
       if bitmapTepi[i,j] < 0 then bitmapTepi[i,j] := 0;
-      if bitmapKontur[i,j] > 1 then bitmapKontur[i,j] := 1;
+      if bitmapTepi[i,j] > 1 then bitmapTepi[i,j] := 1;
 
       if bitmapKontur[i,j] < 0 then bitmapKontur[i,j] := 0;
-      if bitmapKontur[i,j] > 1 then bitmapKontur[i,j] := 1;
+      if bitmapKontur[i,j] > 255 then bitmapKontur[i,j] := 255;
 
-      image5.canvas.pixels[i,j] := RGB(bitmapTepi[i,j]*255,bitmapTepi[i,j]*255,bitmapTepi[i,j]*255); 
+//      printing tepi objek
+      image5.canvas.pixels[i,j] := RGB(bitmapTepi[i,j]*255,bitmapTepi[i,j]*255,bitmapTepi[i,j]*255);
+
+//      printing kontur objek
       image8.canvas.pixels[i,j] := RGB(bitmapKontur[i,j],bitmapKontur[i,j],bitmapKontur[i,j]);
-    end;
-  end;
-
-  for i:=0 to image5.width do
-  begin
-    for j:=0 to image5.height do
-    begin
-
     end;
   end;
 end;
