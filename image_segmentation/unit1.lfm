@@ -132,8 +132,8 @@ object Form1: TForm1
     Left = 656
     Height = 20
     Top = 354
-    Width = 44
-    Caption = 'Kontur'
+    Width = 105
+    Caption = 'Tepi dan Kontur'
     ParentColor = False
   end
   object OpenPictureDialog1: TOpenPictureDialog
