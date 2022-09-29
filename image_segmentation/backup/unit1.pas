@@ -16,7 +16,6 @@ type
     ButtonSegmentasi: TButton;
     ButtonTepi: TButton;
     ButtonLoad: TButton;
-    ButtonSave: TButton;
     GroupBoxSegmentasi: TGroupBox;
     Image1: TImage;
     Image5: TImage;
@@ -24,7 +23,7 @@ type
     Image7: TImage;
     Image8: TImage;
     Image9: TImage;
-    Label1: TLabel;
+    TextKontur: TLabel;
     Label2: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
     SavePictureDialog1: TSavePictureDialog;
@@ -278,17 +277,21 @@ begin
     begin
       temp := false;
 
+//      memperluas objek pada bagian tepi
       for kj:= -1 to 1 do
       begin
         for ki:= -1 to 1 do
         begin
+//          jika objek pernah dimorph maka proses berdasarkan bitmap biner hasil morphing
           if isMorphed then
             temp := temp OR (bitmapBinerMorph[i+ki,j+kj] = SE[ki,kj])
           else
+//            jika belum pernah, maka proses berdasarkan bitmap biner original
             temp := temp OR (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
         end;
       end;
 
+//      pewarnaan canvas dengan warna hitam jika memenuhi aturan dilasi
       if temp then
         image9.canvas.pixels[i,j] := RGB(0,0,0)
       else
@@ -296,6 +299,7 @@ begin
     end;
   end;
 
+//  pengambilan warna melalui canvas *hal ini dikarenakan bug ketika me-rewrite array bitmap morph yang mengakibatkan nilai biner morph selalui bernilai true
   for i:=0 to image1.width-1 do
   begin
     for j:=0 to image1.height-1 do
@@ -307,6 +311,7 @@ begin
     end;
   end;
 
+//  mengisi tepian bitmap biner morph
   if not isMorphed then isiTepiBinerMorph();
 
   printBiner();
@@ -325,18 +330,22 @@ begin
     for j:=0 to image1.height-1 do
     begin
       temp := true;
-
+                         
+//      memperkecil objek pada bagian tepi
       for kj:= -1 to 1 do
       begin
         for ki:= -1 to 1 do
         begin
+//          jika objek pernah dimorph maka proses berdasarkan bitmap biner hasil morphing
           if isMorphed then
             temp := temp AND (bitmapBinerMorph[i+ki,j+kj] = SE[ki,kj])
           else
+//            jika belum pernah, maka proses berdasarkan bitmap biner original
             temp := temp AND (bitmapBiner[i+ki,j+kj] = SE[ki,kj]);
         end;
       end;
-
+                                                       
+//      pewarnaan canvas dengan warna hitam jika memenuhi aturan erosi
       if temp then
         image9.canvas.pixels[i,j] := RGB(0,0,0)
       else

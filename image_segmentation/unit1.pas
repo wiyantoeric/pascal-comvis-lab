@@ -16,7 +16,6 @@ type
     ButtonSegmentasi: TButton;
     ButtonTepi: TButton;
     ButtonLoad: TButton;
-    ButtonSave: TButton;
     GroupBoxSegmentasi: TGroupBox;
     Image1: TImage;
     Image5: TImage;
@@ -24,7 +23,7 @@ type
     Image7: TImage;
     Image8: TImage;
     Image9: TImage;
-    Label1: TLabel;
+    TextKontur: TLabel;
     Label2: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
     SavePictureDialog1: TSavePictureDialog;
@@ -64,7 +63,7 @@ uses
   windows;
 
 var
-  bitmapR, bitmapG, bitmapB, bitmapGray, bitmapGrayFilter, bitmapRedFilter, bitmapGreenFilter, bitmapBlueFilter, bitmapBiner, bitmapBinerMorph : array[-1..1000,-1..1000] of integer;
+  bitmapR, bitmapG, bitmapB, bitmapGray, bitmapGrayFilter, bitmapRedFilter, bitmapGreenFilter, bitmapBlueFilter, bitmapBiner, bitmapBinerMorph, bitmapGraySegmentasi : array[-1..1000,-1..1000] of integer;
   TepiAtas, TepiBawah, TepiKiri, TepiKanan : integer;
   isMorphed : boolean = false;
 
@@ -247,7 +246,7 @@ begin
         for kj:=-1 to 1 do
         begin
           bitmapTepi[i,j] := round(bitmapTepi[i,j] + bitmapBinerMorph[i+ki,j+kj] * kernelTepi[ki,kj]);
-          bitmapKontur[i,j] := round(bitmapKontur[i,j] + bitmapGray[i+ki,j+kj] * kernelTepi[ki,kj]);
+          bitmapKontur[i,j] := round(bitmapKontur[i,j] + bitmapGraySegmentasi[i+ki,j+kj] * kernelTepi[ki,kj]);
         end;
       end;
 
@@ -462,6 +461,8 @@ begin
         image9.canvas.pixels[i,j] := RGB(bitmapR[i,j],bitmapG[i,j],bitmapB[i,j]);
         image6.canvas.pixels[i,j] := RGB(bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255,bitmapBinerMorph[i,j]*255);
         image7.canvas.pixels[i,j] := RGB(bitmapGray[i,j],bitmapGray[i,j],bitmapGray[i,j]);
+
+        bitmapGraySegmentasi[i,j] := bitmapGray[i,j];
       end;
     end;
   end;

@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 795
+  Left = 442
   Height = 784
-  Top = 148
-  Width = 1171
+  Top = 88
+  Width = 1167
   Caption = 'Form1'
   ClientHeight = 784
-  ClientWidth = 1171
+  ClientWidth = 1167
   DesignTimePPI = 120
   LCLVersion = '2.0.12.0'
   object ButtonLoad: TButton
@@ -25,15 +25,6 @@ object Form1: TForm1
     Width = 120
     AutoSize = True
   end
-  object ButtonSave: TButton
-    Left = 160
-    Height = 31
-    Top = 20
-    Width = 94
-    Caption = 'Save'
-    ParentFont = False
-    TabOrder = 1
-  end
   object TextInput: TLabel
     Left = 30
     Height = 20
@@ -50,7 +41,7 @@ object Form1: TForm1
     Width = 94
     Caption = 'Tepi'
     OnClick = ButtonTepiClick
-    TabOrder = 2
+    TabOrder = 1
   end
   object ButtonSegmentasi: TButton
     Left = 32
@@ -59,7 +50,7 @@ object Form1: TForm1
     Width = 94
     Caption = 'Segmentasi'
     OnClick = ButtonSegmentasiClick
-    TabOrder = 3
+    TabOrder = 2
   end
   object Image5: TImage
     Left = 656
@@ -75,7 +66,7 @@ object Form1: TForm1
     Caption = 'Segmentasi'
     ClientHeight = 421
     ClientWidth = 404
-    TabOrder = 4
+    TabOrder = 3
     object Image9: TImage
       Left = 32
       Height = 113
@@ -134,8 +125,16 @@ object Form1: TForm1
   object Image8: TImage
     Left = 656
     Height = 113
-    Top = 360
+    Top = 386
     Width = 113
+  end
+  object TextKontur: TLabel
+    Left = 656
+    Height = 20
+    Top = 354
+    Width = 44
+    Caption = 'Kontur'
+    ParentColor = False
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 336
