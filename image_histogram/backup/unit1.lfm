@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 610
-  Height = 889
-  Top = 118
-  Width = 598
+  Left = 614
+  Height = 583
+  Top = 260
+  Width = 763
   Caption = 'Form1'
-  ClientHeight = 889
-  ClientWidth = 598
+  ClientHeight = 583
+  ClientWidth = 763
   DesignTimePPI = 120
   LCLVersion = '2.0.12.0'
   object ButtonLoad: TButton
@@ -20,16 +20,38 @@ object Form1: TForm1
   object Image1: TImage
     Left = 32
     Height = 113
-    Top = 88
+    Top = 128
     Width = 113
     AutoSize = True
   end
   object Histogram: TImage
-    Left = 192
+    Left = 272
     Height = 280
-    Top = 88
+    Top = 128
     Width = 287
     AutoSize = True
+  end
+  object Label1: TLabel
+    Left = 272
+    Height = 1
+    Top = 104
+    Width = 1
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 535
+    Height = 1
+    Top = 104
+    Width = 1
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 158
+    Height = 20
+    Top = 273
+    Width = 44
+    Caption = 'Label3'
+    ParentColor = False
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 200

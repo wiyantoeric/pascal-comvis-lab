@@ -16,6 +16,9 @@ type
     ButtonLoad: TButton;
     Image1: TImage;
     Histogram: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
     procedure ButtonLoadClick(Sender: TObject);
   private
@@ -73,27 +76,33 @@ begin
   begin
     for j:=0 to image1.Height-1 do
     begin
-      hgGray[bmpGray[i,j]] := hgGray[bmpGray[i,j]] + 1;
+      inc(hgGray[bmpGray[i,j]]);
     end;
   end;
-
-  histogram.Canvas.Brush.Color := ClWhite;
-  histogram.Canvas.FillRect(0, 0, histogram.Width, histogram.Height);
-
-  Histogram.Canvas.Pen.Color := clBlack;
-  Histogram.Canvas.Pen.Width := 1;
-  Histogram.Canvas.Pen.Style := psSolid;
-
-
-  histogram.width := 255;
-  histogram.height := 255;
-
 
   for i:=0 to 255 do
   begin
     if highestVal < hgGray[i] then highestVal := hgGray[i];
   end;
 
+  histogram.width := 255;
+  histogram.height := highestVal;
+
+  histogram.Canvas.Brush.Color := ClWhite;
+  histogram.Canvas.FillRect(0, 0, histogram.Width, histogram.Height);
+
+  histogram.canvas.pen.color := clTeal;
+  histogram.canvas.pen.width := 1;
+  histogram.canvas.pen.style := psSolid;
+
+  label1.caption := inttostr(0);
+  label2.caption := inttostr(255);
+
+  for i:=0 to 255 do
+  begin
+    if highestVal < hgGray[i] then highestVal := hgGray[i];
+  end;
+  label3.caption := inttostr(highestVal);
 
   for i:=0 to 255 do
   begin
