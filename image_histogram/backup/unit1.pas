@@ -14,12 +14,13 @@ type
 
   TForm1 = class(TForm)
     ButtonLoad: TButton;
-    Image1: TImage;
     Histogram: TImage;
+    Image1: TImage;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
+    ScrollBox1: TScrollBox;
     procedure ButtonLoadClick(Sender: TObject);
   private
 

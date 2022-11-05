@@ -84,10 +84,10 @@ begin
   end;
 
   label1.caption := 'Resolution = ' + intToStr(image1.canvas.width) + ' x ' + intToStr(image1.canvas.height);
-  
-  for i:=0 to (image1.canvas.width div matrixSize) do
+
+  for i:=0 to (image1.canvas.width div matrixSize)-1 do
   begin
-    for j:=0 to (image1.canvas.height div matrixSize) do
+    for j:=0 to (image1.canvas.height div matrixSize)-1 do
     begin
       binaryCount := 0;
       for matrixRow:=0 to matrixSize-1 do
@@ -97,7 +97,7 @@ begin
           if bmpBiner[i*matrixSize + matrixRow, j*matrixSize + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
-      memo1.lines.add('Fitur ' + intToStr(loopCount) + ' : ' + floatToStr((binaryCount / (matrixSize*matrixSize)) * 100) + '%');
+      Memo1.lines.add('Fitur ' + intToStr(loopCount) + ' : ' + floatToStr((binaryCount / (matrixSize*matrixSize)) * 100) + '%');
       inc(loopCount);
     end;
   end;
