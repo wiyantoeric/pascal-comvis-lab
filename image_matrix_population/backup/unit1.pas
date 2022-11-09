@@ -17,7 +17,7 @@ type
     Label1: TLabel;
     Load: TButton;
     Image1: TImage;
-    Fitur: TMemo;
+    Memo1: TMemo;
     OpenPictureDialog1: TOpenPictureDialog;
     ScrollBox1: TScrollBox;
     procedure LoadClick(Sender: TObject);
@@ -97,7 +97,7 @@ begin
           if bmpBiner[i*matrixSize + matrixRow, j*matrixSize + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
-      Fitur.lines.add('Fitur ' + intToStr(loopCount) + ' : ' + floatToStr((binaryCount / (matrixSize*matrixSize)) * 100) + '%');
+      Memo1.lines.add('Fitur ' + intToStr(loopCount) + ' : ' + floatToStr((binaryCount / (matrixSize*matrixSize)) * 100) + '%');
       inc(loopCount);
     end;
   end;

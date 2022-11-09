@@ -55,6 +55,7 @@ begin
     Image1.Picture.LoadFromFile(OpenPictureDialog1.FileName);
   end;
 
+//  ekstraksi warna dan menhitung warna grayscale
   for i:=0 to image1.Width-1 do
   begin
     for j:=0 to image1.Height-1 do
@@ -75,6 +76,8 @@ begin
 
   image2.width := image1.canvas.width;
   image2.height := image1.canvas.height;
+
+//  output grayscale pada image2
   for i:=0 to image1.Width-1 do
   begin
     for j:=0 to image1.Height-1 do
@@ -85,6 +88,7 @@ begin
 
   label1.caption := 'Resolution = ' + intToStr(image1.canvas.width) + ' x ' + intToStr(image1.canvas.height);
 
+//  menghitung fitur dengan ukuran matrix 5x5 dan mencetak persentase ke dalam memo
   for i:=0 to (image1.canvas.width div matrixSize)-1 do
   begin
     for j:=0 to (image1.canvas.height div matrixSize)-1 do
@@ -101,7 +105,6 @@ begin
       inc(loopCount);
     end;
   end;
-
 end;
 
 end.

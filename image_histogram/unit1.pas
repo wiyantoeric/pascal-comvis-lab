@@ -81,17 +81,28 @@ begin
     end;
   end;
 
+//  mencari nilai value terbesar
   for i:=0 to 255 do
   begin
     if highestVal < hgGray[i] then highestVal := hgGray[i];
   end;
 
+// mencari nilai histogram tertinggi sebagai tinggi canvas histogram
+  for i:=0 to 255 do
+  begin
+    if highestVal < hgGray[i] then highestVal := hgGray[i];
+  end;
+  label3.caption := inttostr(highestVal);
+
+//  mengatur ukuran histogram
   histogram.width := 255;
   histogram.height := highestVal;
 
+//  mewarnai canvas dengan warna putih
   histogram.Canvas.Brush.Color := ClWhite;
   histogram.Canvas.FillRect(0, 0, histogram.Width, histogram.Height);
 
+//  mengatur pen canvas
   histogram.canvas.pen.color := clTeal;
   histogram.canvas.pen.width := 1;
   histogram.canvas.pen.style := psSolid;
@@ -99,12 +110,7 @@ begin
   label1.caption := inttostr(0);
   label2.caption := inttostr(255);
 
-  for i:=0 to 255 do
-  begin
-    if highestVal < hgGray[i] then highestVal := hgGray[i];
-  end;
-  label3.caption := inttostr(highestVal);
-
+//  menggambar nilai histogram ke dalam canvas histogram
   for i:=0 to 255 do
   begin
     histogram.canvas.moveTo(i, histogram.height-1);
