@@ -69,6 +69,7 @@ object Form1: TForm1
     Width = 44
     Caption = 'Label1'
     ParentColor = False
+    Visible = False
   end
   object Compare: TButton
     Left = 40

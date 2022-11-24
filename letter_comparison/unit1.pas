@@ -46,6 +46,8 @@ uses
 
 var
   bmpGray1, bmpGray2, bmpBiner1, bmpBiner2 : array[0..1000, 0..1000] of integer;
+  tepiAtas1, tepiBawah1, tepiKiri1, tepiKanan1 : integer;
+  tepiAtas2, tepiBawah2, tepiKiri2, tepiKanan2 : integer;
   object1Width, object1Height, object2Width, object2Height : integer;
 
 procedure TForm1.LoadImage1Click(Sender: TObject);
@@ -95,11 +97,10 @@ begin
 
   maxObjectWidth := max(object1Width, object2Width);
   maxObjectHeight := max(object1Height, object2Height);
-
-  matrixWidth := ceil(maxObjectWidth / matrixCount);
-  matrixHeight := ceil(maxObjectHeight / matrixCount);
              
 //  menghitung populasi object 1
+  matrixWidth := ceil(object1Width / matrixCount);
+  matrixHeight := ceil(object1Height / matrixCount);
   for i:=0 to matrixCount-1 do
   begin
     for j:=0 to matrixCount-1 do
@@ -109,7 +110,7 @@ begin
       begin
         for matrixCol:=0 to matrixHeight-1 do
         begin
-          if bmpBiner1[i*matrixCount + matrixRow, j*matrixCount + matrixCol] = 0 then inc(binaryCount);
+          if bmpBiner1[tepiKiri1 + (i*matrixWidth) + matrixRow, tepiAtas1 + (j*matrixHeight) + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
       population1[i,j] := binaryCount / (matrixWidth*matrixHeight);
@@ -117,7 +118,9 @@ begin
       memo1.lines.add('Fitur [' + intToStr(i) + ']' + '[' + intToStr(j) + '] : ' + floatToStr(population1[i][j] * 100) + '%');
     end;
   end;
-
+              
+  matrixWidth := ceil(object2Width / matrixCount);
+  matrixHeight := ceil(object2Height / matrixCount);
 //  menghitung populasi object 2
   for i:=0 to matrixCount-1 do
   begin
@@ -128,7 +131,7 @@ begin
       begin
         for matrixCol:=0 to matrixHeight-1 do
         begin
-          if bmpBiner2[i*matrixCount + matrixRow, j*matrixCount + matrixCol] = 0 then inc(binaryCount);
+          if bmpBiner2[tepiKiri2 + (i*matrixWidth) + matrixRow, tepiAtas2 + (j*matrixHeight) + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
       population2[i,j] := binaryCount / (matrixWidth*matrixHeight);
@@ -271,6 +274,11 @@ begin
 
     image1.canvas.lineTo(tepi[3], tepi[0]);
 
+    tepiAtas1 := tepi[0];
+    tepiBawah1 := tepi[2];
+    tepiKiri1 := tepi[3];
+    tepiKanan1 := tepi[1];
+
     object1Width := tepi[1]-tepi[3];
     object1Height := tepi[2]-tepi[0];
 end;
@@ -361,6 +369,11 @@ begin
     image2.canvas.lineTo(tepi[3], tepi[2]);
 
     image2.canvas.lineTo(tepi[3], tepi[0]);
+
+    tepiAtas2 := tepi[0];
+    tepiBawah2 := tepi[2];
+    tepiKiri2 := tepi[3];
+    tepiKanan2 := tepi[1];
 
     object2Width := tepi[1]-tepi[3];
     object2Height := tepi[2]-tepi[0];
