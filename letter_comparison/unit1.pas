@@ -121,6 +121,7 @@ begin
               
   matrixWidth := ceil(object2Width / matrixCount);
   matrixHeight := ceil(object2Height / matrixCount);
+
 //  menghitung populasi object 2
   for i:=0 to matrixCount-1 do
   begin

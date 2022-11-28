@@ -110,7 +110,7 @@ begin
       begin
         for matrixCol:=0 to matrixHeight-1 do
         begin
-          if bmpBiner1[tepiKiri1 + (i*matrixWidth) + matrixRow, tepiAtas1 + (j*matrixHeight) + matrixHeight] = 0 then inc(binaryCount);
+          if bmpBiner1[tepiKiri1 + (i*matrixWidth) + matrixRow, tepiAtas1 + (j*matrixHeight) + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
       population1[i,j] := binaryCount / (matrixWidth*matrixHeight);
@@ -131,7 +131,7 @@ begin
       begin
         for matrixCol:=0 to matrixHeight-1 do
         begin
-          if bmpBiner2[tepiKiri2 + (i*matrixWidth) + matrixRow, tepiAtas2 + (j*matrixHeight) + matrixHeight] = 0 then inc(binaryCount);
+          if bmpBiner2[tepiKiri2 + (i*matrixWidth) + matrixRow, tepiAtas2 + (j*matrixHeight) + matrixCol] = 0 then inc(binaryCount);
         end;
       end;
       population2[i,j] := binaryCount / (matrixWidth*matrixHeight);
