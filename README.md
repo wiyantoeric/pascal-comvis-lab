@@ -1,2 +1,2 @@
 # pascal-comvis-lab
-Computer vision using Pascal language
+Computer vision with Pascal
